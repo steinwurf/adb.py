@@ -1,6 +1,11 @@
 #! /usr/bin/env python
 # encoding: utf-8
 
+# Copyright (c) 2015 Steinwurf ApS
+# All Rights Reserved
+#
+# Distributed under the "BSD License". See the accompanying LICENSE.rst file.
+
 import argparse
 import subprocess
 import threading
@@ -628,23 +633,6 @@ class ADB(object):
         """Unlock device."""
         self.__multithreaded_cmd(self.__unlock)
 
-    def run_task(self, task):
-        """Run a task."""
-        def disable_verify_apps(handle):
-            #Turn screen off and on to see which devices where affected.
-            self.__turn_screen(handle, False)
-            time.sleep(0.3)
-            cmd = [self.adb, '-s', handle, 'shell', 'settings',
-                   'put', 'global', 'package_verifier_enable', '0']
-            self.__run(cmd)
-            time.sleep(0.3)
-            self.__turn_screen(handle, True)
-
-        if task == 'disable_verify_apps':
-            self.__multithreaded_cmd(disable_verify_apps)
-        else:
-            print("unknown task.")
-
     def shell(self, arguments, log_type):
         output_mutex = threading.Lock()
         output = {}
@@ -826,16 +814,6 @@ def main():
                                          "command only works on Huawei "
                                          "T1_A21L units.")
 
-    tasks = [
-        "disable_verify_apps",
-    ]
-
-    task_parser = subparsers.add_parser('run', help="Run a predefined task.")
-    task_parser.add_argument(
-        'task',
-        choices=tasks,
-        help='The task to run.')
-
     args = parser.parse_args()
     adb = ADB(args.adb, args.threads, args.specific_devices)
     if 'extras' in dir(args):
@@ -861,8 +839,7 @@ def main():
         'stop': lambda args: adb.stop(args.package_name),
         'shell': lambda args: adb.shell(args.shell_command, args.log_type),
         'restart': lambda args: adb.restart(args.package_name),
-        'unlock': lambda args: adb.unlock(),
-        'run': lambda args: adb.run_task(args.task)
+        'unlock': lambda args: adb.unlock()
     }[args.command](args)
 
 

@@ -2,12 +2,10 @@
 adb.py
 ======
 
-The `adb.py` project allow performing tasks on multiple connected Android
-devices simultaneously. This is very useful when you need to perform the same
-task on many devices e.g. installing an `apk`.
-
-Currently the `adb.py` tool will perform the specified task on all connected
-devices.
+`adb.py` allow tasks to be performed on multiple connected Android devices
+simultaneously.
+This is very useful when you need to perform the same task on many devices
+e.g. installing an `apk`.
 
 .. contents:: Table of Contents:
    :local:
@@ -15,7 +13,7 @@ devices.
 Usage
 =====
 
-The `adb.py` project uses the `Android Debug Bridge
+The `adb.py` project wraps the `Android Debug Bridge
 <https://developer.android.com/studio/command-line/adb.html>`_ (`adb`) tool
 shipped with the Android SDK. After installing Android SDK you can find the
 adb tool in `<android-sdk>/platform-tools`.
@@ -57,16 +55,15 @@ Or to get more verbose information without `--quick`::
 Troubleshooting: `unauthorized device`
 ......................................
 
-If you see a message `unauthorized device` when listing connected devices. Try
-unlocking devices, a message box should be shown where you are asked to "Allow
-USB debugging" for your development computer.
+If you see a message `unauthorized device` when listing connected devices,
+make sure you've accepted the prompt asking you to "Allow USB debugging".
 
-Installing an apk
+Installing an APK
 -----------------
 
 One common task is to install an application on the connected devices::
 
-    ./adb.py --adb ../../android-sdk/platform-tools/adb install
+    ./adb.py --adb ~/android-sdk/platform-tools/adb install <APK>
 
 Troubleshooting: `Failure [INSTALL_FAILED_UPDATE_INCOMPATIBLE]`
 ...............................................................
@@ -76,15 +73,15 @@ already installed, most likely signed with a different key. The `solution
 <http://stackoverflow.com/a/13160869>`_ is simply to first `uninstall` the
 application, see Section `Uninstalling an apk`_.
 
-Uninstalling an apk
+Uninstalling an APK
 -------------------
 
 To uninstall an already installed application with the package name
-`com.mycom.app`::
+`com.company.app`::
 
-    ./adb.py --adb ../../android-sdk/platform-tools/adb uninstall com.mycom.app
+    ./adb.py --adb ~/android-sdk/platform-tools/adb uninstall com.company.app
 
-Troubleshooting: Get package name from apk
+Troubleshooting: Get package name from APK
 ..........................................
 
 You can get the package name from an `apk` by running (`stackoverflow answer
